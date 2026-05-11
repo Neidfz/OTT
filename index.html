@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Carnicería Don Carlos</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rojo: #8B1A1A;
+      --rojo-claro: #c0392b;
+      --crema: #FAF3E0;
+      --carbon: #2C2C2C;
+      --dorado: #C9A84C;
+      --bg: #ffffff;
+      --bg-sec: #f7f4ef;
+      --texto: #1a1a1a;
+      --texto-sec: #6b6456;
+      --borde: rgba(0,0,0,0.1);
+      --borde-hover: rgba(0,0,0,0.2);
+      --radius: 10px;
+      --radius-lg: 14px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--carbon);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 24px; gap: 8px; flex-wrap: wrap;
+      border-bottom: 2px solid var(--rojo);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 700; color: var(--crema);
+      white-space: nowrap; letter-spacing: 0.3px;
+    }
+    .nav-logo span { color: var(--dorado); }
+    .nav-buttons { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav-btn {
+      background: transparent;
+      border: 0.5px solid rgba(255,255,255,0.2);
+      color: rgba(250,243,224,0.8); padding: 6px 12px;
+      border-radius: 6px; font-size: 12px; cursor: pointer;
+      transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.1); color: var(--crema); }
+    .nav-btn.active { background: var(--rojo); border-color: var(--rojo); color: white; }
+    .canasta-btn {
+      background: var(--rojo); color: white; border: none;
+      padding: 7px 14px; border-radius: 7px; font-size: 12px;
+      cursor: pointer; display: flex; align-items: center; gap: 6px;
+      font-family: 'DM Sans', sans-serif; transition: background 0.15s;
+      white-space: nowrap; font-weight: 500;
+    }
+    .canasta-btn:hover { background: var(--rojo-claro); }
+    .badge {
+      background: var(--dorado); color: var(--carbon);
+      border-radius: 50%; width: 18px; height: 18px;
+      font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--carbon);
+      padding: 60px 24px;
+      text-align: center;
+      border-bottom: 3px solid var(--rojo);
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(139,26,26,0.05) 0px, rgba(139,26,26,0.05) 2px,
+        transparent 2px, transparent 14px
+      );
+    }
+    .hero-tag {
+      display: inline-block; background: var(--rojo);
+      color: white; font-size: 11px; padding: 4px 14px;
+      border-radius: 4px; margin-bottom: 14px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      position: relative;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 700; color: var(--crema);
+      line-height: 1.25; margin-bottom: 10px; position: relative;
+    }
+    .hero h1 span { color: var(--dorado); }
+    .hero p {
+      color: rgba(250,243,224,0.6); font-size: 15px;
+      margin-bottom: 24px; position: relative;
+    }
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+    .btn-primary {
+      background: var(--rojo); color: white; border: none;
+      padding: 12px 24px; border-radius: 7px; font-size: 14px;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: background 0.15s; font-weight: 500;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-primary:hover { background: var(--rojo-claro); }
+    .btn-outline {
+      background: transparent; color: var(--crema);
+      border: 1px solid rgba(250,243,224,0.35);
+      padding: 12px 24px; border-radius: 7px; font-size: 14px;
+      cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.08); }
+
+    /* ── STATS ── */
+    .stats {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 12px; padding: 24px;
+      background: var(--bg-sec);
+    }
+    .stat-card {
+      text-align: center; padding: 18px 12px;
+      background: var(--bg); border-radius: var(--radius);
+      border: 0.5px solid var(--borde);
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px; font-weight: 700; color: var(--rojo); margin-bottom: 4px;
+    }
+    .stat-label { font-size: 12px; color: var(--texto-sec); }
+
+    /* ── SECCIÓN ── */
+    .section { padding: 32px 24px; }
+    .section-alt { background: var(--bg-sec); }
+    .section-header { margin-bottom: 22px; }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700; color: var(--texto);
+      display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+    }
+    .section-title::after {
+      content: '';
+      display: block; height: 3px; width: 44px;
+      background: var(--rojo); border-radius: 2px;
+    }
+    .section-sub { font-size: 13px; color: var(--texto-sec); margin-top: 2px; }
+
+    /* ── PRODUCTO ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px; margin-bottom: 24px;
+    }
+    .product-card {
+      background: var(--bg); border: 0.5px solid var(--borde);
+      border-radius: var(--radius-lg); overflow: hidden;
+      position: relative; transition: border-color 0.15s, transform 0.15s;
+    }
+    .product-card:hover { border-color: var(--rojo); transform: translateY(-2px); }
+    .product-img {
+      width: 100%; height: 110px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 42px; background: var(--bg-sec);
+    }
+    .product-body { padding: 12px; }
+    .product-name { font-size: 13px; font-weight: 500; color: var(--texto); margin-bottom: 2px; }
+    .product-desc { font-size: 11px; color: var(--texto-sec); margin-bottom: 8px; line-height: 1.4; }
+    .product-price {
+      font-size: 15px; font-weight: 700; color: var(--rojo); margin-bottom: 10px;
+      font-family: 'Playfair Display', serif;
+    }
+    .qty-control { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .qty-btn {
+      width: 26px; height: 26px; border-radius: 5px;
+      border: 0.5px solid var(--borde-hover);
+      background: var(--bg-sec); color: var(--texto);
+      font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s; font-family: 'DM Sans', sans-serif;
+    }
+    .qty-btn:hover { background: var(--borde); }
+    .qty-num { font-size: 14px; font-weight: 500; min-width: 20px; text-align: center; }
+    .add-btn {
+      width: 100%; background: var(--rojo); color: white; border: none;
+      padding: 8px; border-radius: 6px; font-size: 11px; font-weight: 500;
+      cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s;
+    }
+    .add-btn:hover { background: var(--rojo-claro); }
+    .product-badge {
+      position: absolute; top: 8px; left: 8px;
+      font-size: 9px; padding: 3px 8px; border-radius: 4px;
+      font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .badge-fresco { background: #1a7a3a; color: white; }
+    .badge-oferta { background: var(--dorado); color: var(--carbon); }
+    .badge-listo  { background: #e67e22; color: white; }
+
+    /* ── NAV SECCIONES ── */
+    .section-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 20px; border-top: 0.5px solid var(--borde);
+      flex-wrap: wrap; gap: 10px;
+    }
+    .sec-nav-btn {
+      background: transparent; border: 0.5px solid var(--borde-hover);
+      color: var(--texto-sec); padding: 8px 16px; border-radius: 7px;
+      font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+      display: flex; align-items: center; gap: 5px; transition: all 0.15s;
+    }
+    .sec-nav-btn:hover { color: var(--texto); border-color: var(--rojo); }
+    .sec-nav-btn.next { background: var(--rojo); color: white; border-color: var(--rojo); }
+    .sec-nav-btn.next:hover { background: var(--rojo-claro); }
+
+    /* ── CANASTA OVERLAY ── */
+    .canasta-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.5);
+    }
+    .canasta-overlay.open { display: block; }
+    .canasta-panel {
+      position: absolute; right: 0; top: 0; bottom: 0; width: 340px;
+      background: var(--bg);
+      border-left: 0.5px solid var(--borde);
+      display: flex; flex-direction: column;
+    }
+    .canasta-header {
+      padding: 18px 20px; border-bottom: 0.5px solid var(--borde);
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--carbon);
+    }
+    .canasta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 700; color: var(--crema);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .close-btn {
+      background: none; border: none; cursor: pointer;
+      color: rgba(250,243,224,0.6); font-size: 22px; line-height: 1;
+      font-family: 'DM Sans', sans-serif; transition: color 0.1s;
+    }
+    .close-btn:hover { color: var(--crema); }
+    .canasta-items { flex: 1; overflow-y: auto; padding: 14px 20px; }
+    .canasta-empty {
+      text-align: center; padding: 50px 20px;
+      color: var(--texto-sec); font-size: 13px; line-height: 1.6;
+    }
+    .canasta-empty i { font-size: 44px; display: block; margin-bottom: 10px; opacity: 0.4; }
+    .canasta-item {
+      display: flex; gap: 10px; align-items: center;
+      padding: 12px 0; border-bottom: 0.5px solid var(--borde);
+    }
+    .canasta-item-icon { font-size: 26px; }
+    .canasta-item-info { flex: 1; }
+    .canasta-item-name { font-size: 13px; font-weight: 500; color: var(--texto); }
+    .canasta-item-sub { font-size: 11px; color: var(--texto-sec); margin-top: 2px; }
+    .canasta-item-price { font-size: 13px; font-weight: 700; color: var(--rojo); white-space: nowrap; }
+    .remove-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--texto-sec); font-size: 16px;
+      font-family: 'DM Sans', sans-serif; padding: 2px 4px;
+      border-radius: 4px; transition: background 0.1s;
+    }
+    .remove-btn:hover { background: #fee2e2; color: var(--rojo); }
+    .canasta-footer {
+      padding: 18px 20px; border-top: 0.5px solid var(--borde);
+      background: var(--bg-sec);
+    }
+    .total-row {
+      display: flex; justify-content: space-between;
+      font-size: 13px; margin-bottom: 6px; color: var(--texto-sec);
+    }
+    .total-row.main {
+      font-size: 16px; font-weight: 700; color: var(--texto);
+      margin-top: 10px; padding-top: 10px;
+      border-top: 0.5px solid var(--borde);
+      font-family: 'Playfair Display', serif;
+    }
+    .total-row.main span:last-child { color: var(--rojo); }
+    .canasta-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+    .wa-btn {
+      background: #25D366; color: white; border: none;
+      padding: 10px; border-radius: 7px; font-size: 13px;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: background 0.15s;
+    }
+    .wa-btn:hover { background: #1ebe5b; }
+    .vaciar-link {
+      text-align: center; font-size: 12px; color: var(--texto-sec);
+      cursor: pointer; text-decoration: underline;
+      background: none; border: none;
+      font-family: 'DM Sans', sans-serif; width: 100%; padding: 4px;
+    }
+    .vaciar-link:hover { color: var(--rojo); }
+
+    /* ── DOMICILIOS ── */
+    .domicilios-section {
+      background: var(--carbon);
+      padding: 36px 24px;
+    }
+    .domicilios-section .section-title { color: var(--crema); }
+    .domicilios-section .section-title::after { background: var(--dorado); }
+    .domicilios-section .section-sub { color: rgba(250,243,224,0.6); }
+    .beneficios {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 12px; margin: 20px 0 28px;
+    }
+    .beneficio {
+      background: rgba(255,255,255,0.05);
+      border: 0.5px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius); padding: 16px 10px; text-align: center;
+    }
+    .beneficio i { font-size: 24px; color: var(--dorado); display: block; margin-bottom: 6px; }
+    .beneficio-text { font-size: 12px; color: rgba(250,243,224,0.7); line-height: 1.4; }
+    .form-group { margin-bottom: 12px; }
+    .form-label { font-size: 12px; color: rgba(250,243,224,0.6); margin-bottom: 5px; display: block; }
+    .form-input {
+      width: 100%; padding: 10px 12px; border-radius: 7px;
+      border: 0.5px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.07);
+      color: var(--crema); font-size: 13px;
+      font-family: 'DM Sans', sans-serif; transition: border-color 0.15s;
+    }
+    .form-input::placeholder { color: rgba(250,243,224,0.3); }
+    .form-input:focus { outline: none; border-color: var(--dorado); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-input option { background: var(--carbon); color: var(--crema); }
+    .submit-btn {
+      width: 100%; background: var(--rojo); color: white; border: none;
+      padding: 13px; border-radius: 7px; font-size: 14px; font-weight: 500;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      margin-top: 6px; transition: background 0.15s;
+    }
+    .submit-btn:hover { background: var(--rojo-claro); }
+    .wa-domicilio {
+      width: 100%; background: #25D366; color: white; border: none;
+      padding: 11px; border-radius: 7px; font-size: 13px;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: background 0.15s;
+    }
+    .wa-domicilio:hover { background: #1ebe5b; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #1a1a1a; color: rgba(250,243,224,0.6);
+      padding: 32px 24px; text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 700; color: var(--crema); margin-bottom: 4px;
+    }
+    .footer-logo span { color: var(--dorado); }
+    .footer-slogan { font-size: 12px; margin-bottom: 16px; opacity: 0.6; }
+    .footer-links {
+      display: flex; gap: 20px; justify-content: center;
+      margin-bottom: 14px; font-size: 13px; flex-wrap: wrap;
+    }
+    .footer-links a { color: rgba(250,243,224,0.5); text-decoration: none; transition: color 0.15s; }
+    .footer-links a:hover { color: var(--dorado); }
+    .footer-info { font-size: 12px; margin-bottom: 12px; opacity: 0.5; line-height: 1.8; }
+    .footer-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 14px 0; }
+    .footer-copy { font-size: 11px; opacity: 0.3; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: var(--carbon); color: white; padding: 10px 22px;
+      border-radius: 24px; font-size: 13px; z-index: 400;
+      opacity: 0; transition: opacity 0.2s; pointer-events: none;
+      border-left: 3px solid var(--rojo); white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+    .toast.show { opacity: 1; }
+
+    /* ── WA FLOTANTE ── */
+    .wa-float {
+      position: fixed; bottom: 20px; right: 20px; z-index: 150;
+      background: #25D366; color: white; border: none;
+      padding: 11px 18px; border-radius: 28px; font-size: 13px; font-weight: 500;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      display: flex; align-items: center; gap: 7px;
+      box-shadow: 0 4px 16px rgba(37,211,102,0.4);
+      transition: background 0.15s;
+    }
+    .wa-float:hover { background: #1ebe5b; }
+
+    /* ── UTILS ── */
+    .hidden { display: none !important; }
+    .divider-red { height: 3px; background: var(--rojo); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .nav { padding: 8px 14px; }
+      .nav-logo { font-size: 15px; }
+      .nav-btn { font-size: 10px; padding: 5px 8px; }
+      .hero h1 { font-size: 24px; }
+      .form-row { grid-template-columns: 1fr; }
+      .beneficios { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr; }
+      .canasta-panel { width: 100%; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo"><i class="ti ti-meat"></i> La Carnicería <span>Don Carlos</span></div>
+    <div class="nav-buttons">
+      <button class="nav-btn active" onclick="showSection('hero')">Inicio</button>
+      <button class="nav-btn" onclick="showSection('res')">Res</button>
+      <button class="nav-btn" onclick="showSection('cerdo')">Cerdo</button>
+      <button class="nav-btn" onclick="showSection('pollo')">Pollo</button>
+      <button class="nav-btn" onclick="showSection('embutidos')">Embutidos</button>
+      <button class="nav-btn" onclick="showSection('marinados')">Marinados</button>
+      <button class="nav-btn" onclick="showSection('domicilios')">Domicilios</button>
+    </div>
+    <button class="canasta-btn" onclick="toggleCanasta()">
+      <i class="ti ti-basket"></i> Mi canasta
+      <span class="badge" id="canasta-badge">0</span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <div id="section-hero">
+    <div class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-tag">20 años de tradición</div>
+      <h1>Carnes Frescas del <span>Campo a tu Mesa</span></h1>
+      <p>Cortes premium seleccionados a diario · Cali, Valle del Cauca</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showSection('res')">
+          Ver el mercado <i class="ti ti-arrow-right"></i>
+        </button>
+        <button class="btn-outline" onclick="showSection('domicilios')">Pedir a domicilio</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-num">20+</div>
+        <div class="stat-label">Años de experiencia</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Clientes fieles</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">Diario</div>
+        <div class="stat-label">Entregas a domicilio</div>
+      </div>
+    </div>
+    <div class="section" style="padding-top:0;">
+      <div class="section-nav" style="border-top:0.5px solid var(--borde); padding-top:20px;">
+        <span></span>
+        <button class="sec-nav-btn next" onclick="showSection('res')">
+          Ver cortes de res <i class="ti ti-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RES -->
+  <div id="section-res" class="section hidden">
+    <div class="section-header">
+      <div class="section-title"><i class="ti ti-beef"></i> Cortes de res</div>
+      <div class="section-sub">Selección de cortes frescos de res, procesados el mismo día</div>
+    </div>
+    <div class="product-grid" id="grid-res"></div>
+    <div class="section-nav">
+      <button class="sec-nav-btn" onclick="showSection('hero')"><i class="ti ti-arrow-left"></i> Inicio</button>
+      <button class="sec-nav-btn next" onclick="showSection('cerdo')">Ver cerdo <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- CERDO -->
+  <div id="section-cerdo" class="section section-alt hidden">
+    <div class="section-header">
+      <div class="section-title"><i class="ti ti-tools-kitchen-2"></i> Cortes de cerdo</div>
+      <div class="section-sub">Carnes de cerdo tiernas y frescas para todos los gustos</div>
+    </div>
+    <div class="product-grid" id="grid-cerdo"></div>
+    <div class="section-nav">
+      <button class="sec-nav-btn" onclick="showSection('res')"><i class="ti ti-arrow-left"></i> Ver res</button>
+      <button class="sec-nav-btn next" onclick="showSection('pollo')">Ver pollo <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- POLLO -->
+  <div id="section-pollo" class="section hidden">
+    <div class="section-header">
+      <div class="section-title"><i class="ti ti-drumstick"></i> Pollo fresco</div>
+      <div class="section-sub">Pollo fresco de granja, entero o en piezas</div>
+    </div>
+    <div class="product-grid" id="grid-pollo"></div>
+    <div class="section-nav">
+      <button class="sec-nav-btn" onclick="showSection('cerdo')"><i class="ti ti-arrow-left"></i> Ver cerdo</button>
+      <button class="sec-nav-btn next" onclick="showSection('embutidos')">Ver embutidos <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- EMBUTIDOS -->
+  <div id="section-embutidos" class="section section-alt hidden">
+    <div class="section-header">
+      <div class="section-title"><i class="ti ti-tool"></i> Embutidos y chorizos</div>
+      <div class="section-sub">Embutidos artesanales preparados en casa</div>
+    </div>
+    <div class="product-grid" id="grid-embutidos"></div>
+    <div class="section-nav">
+      <button class="sec-nav-btn" onclick="showSection('pollo')"><i class="ti ti-arrow-left"></i> Ver pollo</button>
+      <button class="sec-nav-btn next" onclick="showSection('marinados')">Ver marinados <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- MARINADOS -->
+  <div id="section-marinados" class="section hidden">
+    <div class="section-header">
+      <div class="section-title"><i class="ti ti-flame"></i> Carnes marinadas</div>
+      <div class="section-sub">Listos para el asador. Solo calienta y disfruta</div>
+    </div>
+    <div class="product-grid" id="grid-marinados"></div>
+    <div class="section-nav">
+      <button class="sec-nav-btn" onclick="showSection('embutidos')"><i class="ti ti-arrow-left"></i> Ver embutidos</button>
+      <button class="sec-nav-btn next" onclick="showSection('domicilios')">Ver domicilios <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- DOMICILIOS -->
+  <div id="section-domicilios" class="domicilios-section hidden">
+    <div class="section-header">
+      <div class="section-title"><i class="ti ti-truck-delivery"></i> Domicilios</div>
+      <div class="section-sub">¿No puedes venir? ¡Te llevamos tu pedido!</div>
+    </div>
+    <div class="beneficios">
+      <div class="beneficio">
+        <i class="ti ti-clock"></i>
+        <div class="beneficio-text">Entrega en 2 horas</div>
+      </div>
+      <div class="beneficio">
+        <i class="ti ti-package"></i>
+        <div class="beneficio-text">Empaque al vacío</div>
+      </div>
+      <div class="beneficio">
+        <i class="ti ti-temperature"></i>
+        <div class="beneficio-text">Cadena de frío garantizada</div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Nombre completo</label>
+        <input class="form-input" type="text" placeholder="Tu nombre">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Teléfono / WhatsApp</label>
+        <input class="form-input" type="tel" placeholder="300 000 0000">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Dirección exacta</label>
+      <input class="form-input" type="text" placeholder="Calle, número, apartamento">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Barrio / Zona</label>
+        <input class="form-input" type="text" placeholder="Barrio">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Horario preferido</label>
+        <select class="form-input">
+          <option>Mañana 8am – 12pm</option>
+          <option>Tarde 12pm – 6pm</option>
+          <option>Noche 6pm – 9pm</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Notas del pedido</label>
+      <textarea class="form-input" rows="3" placeholder="Corte especial, instrucciones de entrega..."></textarea>
+    </div>
+    <button class="submit-btn" onclick="showToast('Pedido enviado. ¡Te contactamos pronto!')">
+      <i class="ti ti-send"></i> Solicitar domicilio
+    </button>
+    <button class="wa-domicilio" onclick="showToast('Redirigiendo a WhatsApp...')">
+      <i class="ti ti-brand-whatsapp"></i> Escribir por WhatsApp
+    </button>
+    <div class="section-nav" style="border-top:0.5px solid rgba(255,255,255,0.1); margin-top:24px; padding-top:20px;">
+      <button class="sec-nav-btn" style="border-color:rgba(255,255,255,0.2);color:rgba(250,243,224,0.6);" onclick="showSection('marinados')">
+        <i class="ti ti-arrow-left"></i> Ver marinados
+      </button>
+      <span></span>
+    </div>
+  </div>
+
+  <div class="divider-red"></div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logo"><i class="ti ti-meat"></i> La Carnicería <span>Don Carlos</span></div>
+    <div class="footer-slogan">20 años llevando lo mejor a tu mesa</div>
+    <div class="footer-links">
+      <a href="#" onclick="showSection('hero');return false;">Inicio</a>
+      <a href="#" onclick="showSection('res');return false;">Mercado</a>
+      <a href="#" onclick="showSection('domicilios');return false;">Domicilios</a>
+    </div>
+    <div class="footer-info">
+      <i class="ti ti-clock"></i> Lun–Sáb 6am–7pm · Dom 6am–2pm<br>
+      <i class="ti ti-map-pin"></i> Cali, Valle del Cauca &nbsp;·&nbsp;
+      <i class="ti ti-phone"></i> 300 000 0000
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-copy">© 2026 La Carnicería Don Carlos · Todos los derechos reservados</div>
+  </footer>
+
+  <!-- CANASTA OVERLAY -->
+  <div class="canasta-overlay" id="canasta-overlay" onclick="closeCanasta(event)">
+    <div class="canasta-panel">
+      <div class="canasta-header">
+        <div class="canasta-title"><i class="ti ti-basket"></i> Tu canasta</div>
+        <button class="close-btn" onclick="toggleCanasta()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="canasta-items" id="canasta-items">
+        <div class="canasta-empty">
+          <i class="ti ti-basket-off"></i>
+          Tu canasta está vacía.<br>¡Agrega productos del mercado!
+        </div>
+      </div>
+      <div class="canasta-footer" id="canasta-footer" style="display:none;">
+        <div class="total-row"><span>Subtotal</span><span id="subtotal-val">$0</span></div>
+        <div class="total-row"><span>Domicilio</span><span style="color:#1a7a3a;">Gratis +$80.000</span></div>
+        <div class="total-row main"><span>Total</span><span id="total-val">$0</span></div>
+        <div class="canasta-actions">
+          <button class="btn-primary" style="justify-content:center;" onclick="showToast('Pedido confirmado. ¡Te contactamos pronto!')">
+            <i class="ti ti-check"></i> Confirmar pedido
+          </button>
+          <button class="wa-btn" onclick="showToast('Enviando pedido por WhatsApp...')">
+            <i class="ti ti-brand-whatsapp"></i> Enviar por WhatsApp
+          </button>
+          <button class="vaciar-link" onclick="vaciarCanasta()">Vaciar canasta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- WA FLOTANTE -->
+  <button class="wa-float" onclick="showToast('Abriendo WhatsApp...')">
+    <i class="ti ti-brand-whatsapp"></i> Pedir por WhatsApp
+  </button>
+
+  <script>
+    const productos = {
+      res: [
+        { id:'r1', nombre:'Lomo de res',     desc:'Corte grueso ideal para asar',   precio:28900, emoji:'🥩', badge:'Fresco hoy', tipo:'fresco' },
+        { id:'r2', nombre:'Costilla de res', desc:'Para sancocho o asado',           precio:19500, emoji:'🍖', badge:'Fresco hoy', tipo:'fresco' },
+        { id:'r3', nombre:'Carne molida',    desc:'Molida fresca al momento',        precio:15800, emoji:'🥩', badge:'',          tipo:'' },
+        { id:'r4', nombre:'Punta de anca',   desc:'Corte suave y jugoso',            precio:32000, emoji:'🥩', badge:'Oferta',    tipo:'oferta' },
+      ],
+      cerdo: [
+        { id:'c1', nombre:'Lomo de cerdo',    desc:'Magro y jugoso',          precio:22500, emoji:'🍖', badge:'Fresco hoy', tipo:'fresco' },
+        { id:'c2', nombre:'Costilla cerdo',   desc:'Para BBQ o horno',        precio:18000, emoji:'🦴', badge:'',          tipo:'' },
+        { id:'c3', nombre:'Chuleta',          desc:'Corte clásico',           precio:20000, emoji:'🥩', badge:'Fresco hoy', tipo:'fresco' },
+        { id:'c4', nombre:'Pernil',           desc:'Ideal para hornear',      precio:17500, emoji:'🍖', badge:'Oferta',    tipo:'oferta' },
+      ],
+      pollo: [
+        { id:'p1', nombre:'Pechuga de pollo', desc:'Sin hueso',               precio:13500, emoji:'🍗', badge:'Fresco hoy', tipo:'fresco' },
+        { id:'p2', nombre:'Pernil de pollo',  desc:'Con o sin piel',          precio:11000, emoji:'🍗', badge:'',          tipo:'' },
+        { id:'p3', nombre:'Pollo entero',     desc:'Listo para cocinar',      precio:9800,  emoji:'🐔', badge:'Fresco hoy', tipo:'fresco' },
+        { id:'p4', nombre:'Alas de pollo',    desc:'Para asar o freír',       precio:10500, emoji:'🍗', badge:'',          tipo:'' },
+      ],
+      embutidos: [
+        { id:'e1', nombre:'Chorizo santarrosano', desc:'Tradicional colombiano', precio:18000, emoji:'🌭', badge:'Artesanal',  tipo:'fresco' },
+        { id:'e2', nombre:'Morcilla',             desc:'Receta casera',          precio:14000, emoji:'🌭', badge:'',          tipo:'' },
+        { id:'e3', nombre:'Salchicha artesanal',  desc:'Ahumada',               precio:16500, emoji:'🌭', badge:'Artesanal',  tipo:'fresco' },
+        { id:'e4', nombre:'Butifarra',            desc:'Fresca del día',         precio:19000, emoji:'🌭', badge:'Fresco hoy', tipo:'fresco' },
+      ],
+      marinados: [
+        { id:'m1', nombre:'Pinchos de res',   desc:'Marinado con especias',      precio:24000, emoji:'🍢', badge:'Listo para asar', tipo:'listo' },
+        { id:'m2', nombre:'Chuletas BBQ',     desc:'Salsa ahumada artesanal',    precio:23500, emoji:'🥩', badge:'Listo para asar', tipo:'listo' },
+        { id:'m3', nombre:'Alitas picantes',  desc:'Marinado 24 horas',          precio:15000, emoji:'🍗', badge:'Listo para asar', tipo:'listo' },
+        { id:'m4', nombre:'Lomo al ajo',      desc:'Corte premium listo',        precio:30000, emoji:'🥩', badge:'Listo para asar', tipo:'listo' },
+      ],
+    };
+
+    const cantidades = {};
+    const canasta   = {};
+
+    function fmt(n) {
+      return '$' + Math.round(n).toLocaleString('es-CO');
+    }
+
+    function badgeClass(tipo) {
+      if (tipo === 'fresco') return 'badge-fresco';
+      if (tipo === 'oferta') return 'badge-oferta';
+      if (tipo === 'listo')  return 'badge-listo';
+      return '';
+    }
+
+    function buildGrids() {
+      Object.keys(productos).forEach(cat => {
+        cantidades[cat] = {};
+        const grid = document.getElementById('grid-' + cat);
+        if (!grid) return;
+        grid.innerHTML = productos[cat].map(p => {
+          cantidades[cat][p.id] = 1;
+          return `
+            <div class="product-card">
+              ${p.badge ? `<div class="product-badge ${badgeClass(p.tipo)}">${p.badge}</div>` : ''}
+              <div class="product-img">${p.emoji}</div>
+              <div class="product-body">
+                <div class="product-name">${p.nombre}</div>
+                <div class="product-desc">${p.desc}</div>
+                <div class="product-price">${fmt(p.precio)}/kg</div>
+                <div class="qty-control">
+                  <button class="qty-btn" onclick="changeQty('${cat}','${p.id}',-1)">−</button>
+                  <span class="qty-num" id="qty-${p.id}">1</span>
+                  <button class="qty-btn" onclick="changeQty('${cat}','${p.id}',1)">+</button>
+                </div>
+                <button class="add-btn" onclick="addToCanasta('${p.id}','${cat}')">+ Agregar a la canasta</button>
+              </div>
+            </div>`;
+        }).join('');
+      });
+    }
+
+    function changeQty(cat, id, delta) {
+      cantidades[cat][id] = Math.max(1, (cantidades[cat][id] || 1) + delta);
+      const el = document.getElementById('qty-' + id);
+      if (el) el.textContent = cantidades[cat][id];
+    }
+
+    function addToCanasta(id, cat) {
+      const prod = productos[cat].find(p => p.id === id);
+      if (!prod) return;
+      const qty = cantidades[cat][id] || 1;
+      if (canasta[id]) canasta[id].qty += qty;
+      else canasta[id] = { ...prod, qty };
+      renderCanasta();
+      showToast(prod.nombre + ' agregado a la canasta ✓');
+    }
+
+    function renderCanasta() {
+      const items  = Object.values(canasta);
+      const total  = items.reduce((s, i) => s + i.precio * i.qty, 0);
+      const count  = items.reduce((s, i) => s + i.qty, 0);
+      document.getElementById('canasta-badge').textContent = count;
+
+      const container = document.getElementById('canasta-items');
+      const footer    = document.getElementById('canasta-footer');
+
+      if (items.length === 0) {
+        container.innerHTML = `<div class="canasta-empty"><i class="ti ti-basket-off"></i>Tu canasta está vacía.<br>¡Agrega productos del mercado!</div>`;
+        footer.style.display = 'none';
+        return;
+      }
+
+      container.innerHTML = items.map(i => `
+        <div class="canasta-item">
+          <div class="canasta-item-icon">${i.emoji}</div>
+          <div class="canasta-item-info">
+            <div class="canasta-item-name">${i.nombre}</div>
+            <div class="canasta-item-sub">${i.qty} kg · ${fmt(i.precio)}/kg</div>
+          </div>
+          <div class="canasta-item-price">${fmt(i.precio * i.qty)}</div>
+          <button class="remove-btn" onclick="removeItem('${i.id}')" title="Eliminar"><i class="ti ti-x"></i></button>
+        </div>
+      `).join('');
+
+      document.getElementById('subtotal-val').textContent = fmt(total);
+      document.getElementById('total-val').textContent    = fmt(total);
+      footer.style.display = 'block';
+    }
+
+    function removeItem(id) { delete canasta[id]; renderCanasta(); }
+    function vaciarCanasta() { Object.keys(canasta).forEach(k => delete canasta[k]); renderCanasta(); }
+
+    function toggleCanasta() {
+      document.getElementById('canasta-overlay').classList.toggle('open');
+    }
+
+    function closeCanasta(e) {
+      if (e.target === document.getElementById('canasta-overlay')) toggleCanasta();
+    }
+
+    const secciones = ['hero','res','cerdo','pollo','embutidos','marinados','domicilios'];
+    const labels    = { hero:'Inicio', res:'Res', cerdo:'Cerdo', pollo:'Pollo', embutidos:'Embutidos', marinados:'Marinados', domicilios:'Domicilios' };
+
+    function showSection(id) {
+      secciones.forEach(s => {
+        const el = document.getElementById('section-' + s);
+        if (el) el.classList.add('hidden');
+      });
+      const target = document.getElementById('section-' + id);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent.trim() === labels[id]);
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    buildGrids();
+    renderCanasta();
+  </script>
+</body>
+</html>
